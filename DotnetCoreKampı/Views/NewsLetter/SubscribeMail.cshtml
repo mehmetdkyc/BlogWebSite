@@ -1,0 +1,28 @@
+﻿
+<div class="tech-btm">
+
+    <p>Get the latest news of your writers.</p>
+    <form>
+        <input type="email" placeholder="Email" required="" name="Mail" id="postmailadress">
+        <input type="submit" value="Subscribe" onclick="subMail()" >
+    </form>
+
+</div>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    function subMail() {
+        var mail = $('#postmailadress').val();
+        console.log(mail);
+        if (mail == "") {
+            alert("Mail Adress can't be null");
+            return false;
+        }
+        $.post(
+            '/NewsLetter/SubscribeMail', {
+            mailAdress: mail,
+        }).done(function (result) {
+            alert("Success.");
+        });
+    }
+    
+</script>

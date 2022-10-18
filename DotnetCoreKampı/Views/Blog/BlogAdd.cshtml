@@ -1,0 +1,56 @@
+﻿@model Blog
+@{
+    Layout = "~/Views/Shared/WriterLayout.cshtml";
+}
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Blog Ekle</h4>
+            <form class="forms-sample" asp-action="BlogAdd" asp-controller="Blog" method="post">
+                <div class="form-group">
+                    <label for="exampleInputName1">Blog Başlığı</label>
+                    <input type="text" class="form-control" id="exampleInputName1" placeholder="Başlığı giriniz.." name="BlogTitle">
+                    @Html.ValidationMessageFor(x => x.BlogTitle, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label for="exampleTextarea1">Blog İçeriği</label>
+                    <textarea class="form-control" id="exampleTextarea1" name="BlogContent"></textarea>
+                    @Html.ValidationMessageFor(x => x.BlogContent, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputName2">Blog Thumbnail</label>
+                    <input class="form-control" id="exampleInputName2" name="BlogThumbnailImage">
+                    @Html.ValidationMessageFor(x => x.BlogThumbnailImage, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputName4">Blog Resmi</label>
+                    <input class="form-control" id="exampleInputName4" name="BlogImage">
+                    @Html.ValidationMessageFor(x => x.BlogImage, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlSelect2">Kategori</label>
+                    <select class="form-control form-control-lg" id="exampleFormControlSelect2" name="CategoryID">
+                        @foreach (var item in ViewBag.CategoryValues as List<SelectListItem>)
+                        {
+                            <option value="@item.Value" >@item.Text</option>
+                        }
+                    </select>
+                </div>
+                @*<div class="form-group">
+            <label>Resim Ekle</label>
+            <input type="file" name="BlogImage" class="file-upload-default">
+            <div class="input-group col-xs-12">
+                <input type="text" class="form-control file-upload-info" disabled placeholder="Resim Ekle..">
+                <span class="input-group-append">
+                    <button class="file-upload-browse btn btn-gradient-primary" type="button">Yükle</button>
+                </span>
+            </div>
+        </div>*@
+
+                <button type="submit" class="btn btn-gradient-primary mr-2">Submit</button>
+                <button class="btn btn-light">Cancel</button>
+            </form>
+        </div>
+    </div>
+</div>

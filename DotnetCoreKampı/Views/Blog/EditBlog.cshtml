@@ -1,0 +1,129 @@
+﻿@model Blog
+@{
+    Layout = "~/Views/Shared/WriterLayout.cshtml";
+    var writerID = Model.WriterID;
+}
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Blog Güncelle</h4>
+            <form class="forms-sample">
+                <div class="form-group">
+                    <label for="titleBlog">Blog Başlığı</label>
+                    <input type="text" class="form-control" id="titleBlog" placeholder="Başlığı giriniz.." name="BlogTitle" value="@Model.BlogTitle">
+                    @Html.ValidationMessageFor(x => x.BlogTitle, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    <label for="thumbnailBlog">Blog Thumbnail</label>
+                    <input class="form-control" id="thumbnailBlog" name="BlogThumbnailImage" value="@Model.BlogThumbnailImage">
+                    @Html.ValidationMessageFor(x => x.BlogThumbnailImage, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label for="blogImage">Blog Resmi</label>
+                    <input class="form-control" id="blogImage" name="BlogImage" value="@Model.BlogImage">
+                    @Html.ValidationMessageFor(x => x.BlogImage, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlSelect2">Kategori</label>
+                    <select class="form-control form-control-lg" id="exampleFormControlSelect2" name="CategoryID" value="@Model.CategoryID">
+                        @foreach (var item in ViewBag.CategoryValues as List<SelectListItem>)
+                        {
+                            if (item.Value == Model.CategoryID.ToString())
+                            {
+                                <option value="@item.Value" selected>@item.Text</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="contentBlog">Blog İçeriği</label>
+                    <textarea class="form-control" id="contentBlog" name="BlogContent">@Model.BlogContent</textarea>
+                    @Html.ValidationMessageFor(x => x.BlogContent, "", new { @class = "text-danger" })
+                </div>
+
+                <button onclick="updateBlog(@Model.BlogID)" class="btn btn-gradient-primary mr-2">Güncelle</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    function updateBlog(blogId) {
+        if (blogId == null) {
+            alert("Id boş olamaz.");
+            return false;
+        }
+        var blogTitle = $('#titleBlog').val();
+        var blogThumbnail = $('#thumbnailBlog').val();
+        var blogImage = $('#blogImage').val();
+        var blogContent = $('#contentBlog').val();
+        var categoryValue = $('select[name=CategoryID]').val();
+
+        var model = {
+            BlogID: blogId,
+            BlogTitle: blogTitle,
+            BlogThumbnailImage: blogThumbnail,
+            BlogImage: blogImage,
+            BlogContent: blogContent,
+            CategoryID: categoryValue,
+            WriterID: '@writerID'
+        };
+        debugger;
+        $.ajax(
+            {
+                type: "POST",
+                url: '/Blog/EditBlog',
+                data: model,
+                contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                dataType: "json",
+                success: function (response) {
+                    if (response) {
+                        window.location.href = "/Blog/GetBlogsByWriterId";
+                    }
+                    else alert("Hata!");
+                },
+                error: function (response) {
+                    alert("Hata!");
+                }
+            }
+        );
+
+        //swal({
+        //    title: "Are you sure?",
+        //    text: "Once updated, you will not be able to recover this imaginary file!",
+        //    icon: "warning",
+        //    buttons: true,
+        //    dangerMode: true,
+        //}).then((willDelete) => {
+        //        if (willDelete) {
+        //            $.ajax(
+        //                {
+        //                    type: "POST",
+        //                    url: '/Blog/EditBlog',
+        //                    data: JSON.stringify(model),
+        //                    success: function (response) {
+        //                        swal("Poof! Your imaginary file has been updated!", {
+        //                            icon: "success",
+        //                        }).then((isOkey) => {
+        //                            if (isOkey) {
+        //                                window.location.href = response.redirectToUrl;
+        //                            }
+        //                        });
+        //                    },
+        //                    error: function (response) {
+
+        //                    }
+        //                }
+        //            );
+        //        } else {
+        //            swal("Your imaginary file is safe!");
+        //        }
+        //    });
+    }
+
+</script>

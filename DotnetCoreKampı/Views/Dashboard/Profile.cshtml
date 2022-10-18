@@ -1,0 +1,41 @@
+﻿@model Writer
+@{
+    Layout = "~/Views/Shared/WriterLayout.cshtml";
+}
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Yazar Profil Güncelleme</h4>
+            <form class="forms-sample" asp-controller="Dashboard" asp-action="UpdateProfile" method="post" >
+                <div class="form-group">
+                    <label for="writerName">Yazar İsmi</label>
+                    <input type="text" class="form-control" id="writerName" name="Name" value="@Model.Name">
+                    @Html.ValidationMessageFor(x => x.Name, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label for="writerMail">Mail Adresi</label>
+                    <input type="text" class="form-control" id="writerMail" name="MailAdress" value="@Model.MailAdress">
+                    @Html.ValidationMessageFor(x => x.MailAdress, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label for="writerAbout">Hakkında</label>
+                    <textarea class="form-control" id="writerAbout" name="WriterAbout">@Model.WriterAbout</textarea>
+                    @Html.ValidationMessageFor(x => x.WriterAbout, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                        <label>Yazar Görseli</label>
+                        <input type="file" name="WriterImage" class="file-upload-default">
+                        <div class="input-group col-xs-12">
+                            <input type="file" class="form-control file-upload-info" disabled placeholder="Resim Ekle..">
+                            <span class="input-group-append">
+                                <button class="file-upload-browse btn btn-gradient-primary" type="button">Yükle</button>
+                            </span>
+                        </div>
+                    </div>
+
+                <button type="submit" class="btn btn-gradient-primary mr-2">Güncelle</button>
+            </form>
+        </div>
+    </div>
+</div>

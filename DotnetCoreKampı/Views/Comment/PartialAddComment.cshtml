@@ -1,0 +1,46 @@
+﻿
+@{
+    var blogId = ViewBag.blogId;
+}
+
+<div class="comment-top">
+    <h4>Leave a Comment</h4>
+    <div class="comment-bottom">
+        <form >
+            <input class="form-control" type="text" name="CommentUserName" placeholder="Name" required="">
+            <input class="form-control" type="text" name="CommentTitle" placeholder="Title" required="">
+            <input class="form-control" type="text" name="CommentContent" placeholder="Subject" required="">
+
+            <button type="submit" onclick="sendComment()" class="btn btn-primary submit">Submit</button>
+        </form>
+    </div>
+</div>
+<script>
+    function sendComment() {
+        var username = $('[name=CommentUserName]').val();
+        var title = $('[name=CommentTitle]').val();
+        var content = $('[name=CommentContent]').val();
+
+        if (username == "") {
+            alert("Mail Adress can't be null");
+            return false;
+        }
+        if (title == "") {
+            alert("Mail Adress can't be null");
+            return false;
+        }
+        if (content == "") {
+            alert("Mail Adress can't be null");
+            return false;
+        }
+        $.post(
+            '/Comment/PartialAddComment', {
+            CommentUserName: username,
+            CommentTitle: title,
+            CommentContent: content,
+            BlogID: '@blogId'
+
+        });
+    }
+
+</script>
