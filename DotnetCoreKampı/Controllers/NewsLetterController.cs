@@ -7,7 +7,12 @@ namespace DotnetCoreKampı.Controllers
 {
     public class NewsLetterController : Controller
     {
-        NewsLetterManager newsLetterManager = new NewsLetterManager(new EfNewsLetterRepository());
+        NewsLetterManager newsLetterManager;
+
+        public NewsLetterController(NewsLetterManager newsLetterManager)
+        {
+            this.newsLetterManager = newsLetterManager;
+        }
 
         [HttpGet]
         public PartialViewResult SubscribeMail()

@@ -6,7 +6,13 @@ namespace DotnetCoreKampı.ViewComponents.Dashboard
 {
     public class DashboardWriterAbout : ViewComponent
     {
-        WriterManager writerManager = new WriterManager(new EfWriterRepository());
+        WriterManager writerManager;
+
+        public DashboardWriterAbout(WriterManager writerManager)
+        {
+            this.writerManager = writerManager;
+        }
+
         public IViewComponentResult Invoke()
         {
             var values = writerManager.GetById(1);

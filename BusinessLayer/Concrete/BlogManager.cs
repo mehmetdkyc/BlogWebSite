@@ -11,7 +11,7 @@ namespace BusinessLayer.Concrete
 {
     public class BlogManager : IBlogService
     {
-        IBlogDal _blogdal;
+        private readonly IBlogDal _blogdal;
 
         public BlogManager(IBlogDal blogdal)
         {

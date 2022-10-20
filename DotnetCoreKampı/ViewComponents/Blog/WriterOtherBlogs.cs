@@ -6,7 +6,13 @@ namespace DotnetCoreKampı.ViewComponents.Blog
 {
     public class WriterOtherBlogs : ViewComponent
     {
-        BlogManager blogManager = new BlogManager(new EfBlogRepository());
+        BlogManager blogManager;
+
+        public WriterOtherBlogs(BlogManager blogManager)
+        {
+            this.blogManager = blogManager;
+        }
+
         public IViewComponentResult Invoke()
         {
             var values = blogManager.GetBlogListWithWriter(1);

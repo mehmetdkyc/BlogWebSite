@@ -1,6 +1,9 @@
-﻿using DataAccessLayer.Concrete;
+﻿using BusinessLayer.Abstract;
+using BusinessLayer.Concrete;
+using DataAccessLayer.Concrete;
 using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -9,6 +12,12 @@ namespace DotnetCoreKampı.Controllers
 {
     public class LoginController : Controller
     {
+        WriterManager _writer; 
+        public LoginController(WriterManager writerManager)
+        {
+            this._writer = writerManager;
+        }
+
         [AllowAnonymous]
 
         [HttpGet]
@@ -20,17 +29,17 @@ namespace DotnetCoreKampı.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(Writer writer)
         {
-            Context c=new Context();
-            var dataValue = c.Writers.FirstOrDefault(x=>x.MailAdress == writer.MailAdress && x.Password == writer.Password);
+            var dataValue = _writer.GetList().FirstOrDefault(x => x.MailAdress == writer.MailAdress && x.Password == writer.Password);
 
-            if(dataValue != null)
+            if (dataValue != null)
             {
-                //HttpContext.Session.SetString("username", writer.MailAdress);
+                var writerID = dataValue.ID;
+                HttpContext.Session.SetInt32("writerID", writerID);
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name,writer.MailAdress)
                 };
-                var userIdentity = new ClaimsIdentity(claims,"a");
+                var userIdentity = new ClaimsIdentity(claims, "a");
                 ClaimsPrincipal principal = new ClaimsPrincipal(userIdentity);
                 await HttpContext.SignInAsync(principal);
 
@@ -41,7 +50,15 @@ namespace DotnetCoreKampı.Controllers
                 return View();
             }
 
-            
+
+        }
+        [HttpGet]
+        public async Task<IActionResult> LogOut()
+        {
+
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Index", "Login");
+
         }
     }
 }

@@ -5,10 +5,9 @@ namespace DataAccessLayer.Concrete
 {
     public class Context : DbContext
     {
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public Context(DbContextOptions<Context> contextOptions) : base(contextOptions)
         {
-            base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlServer("Server=DESKTOP-QFIKDEC; Database=DotnetCoreKampı; TrustServerCertificate=True; Trusted_Connection=True;");
+
         }
         public DbSet<About>? Abouts { get; set; }
         public DbSet<Blog>? Blogs { get; set; }
@@ -18,6 +17,8 @@ namespace DataAccessLayer.Concrete
         public DbSet<Writer>? Writers { get; set; }
         public DbSet<NewsLetter>? NewsLetters { get; set; }
         public DbSet<BlogRating>? BlogRatings { get; set; }
+        public DbSet<Notification>? Notifications { get; set; }
+        public DbSet<Message>? Messages { get; set; }
     }
 
 }

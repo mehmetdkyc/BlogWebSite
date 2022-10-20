@@ -1,5 +1,7 @@
-﻿using BusinessLayer.Concrete;
+﻿using BusinessLayer.Abstract;
+using BusinessLayer.Concrete;
 using BusinessLayer.ValidationRules;
+using DataAccessLayer.Concrete;
 using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
 using FluentValidation.Results;
@@ -10,8 +12,15 @@ namespace DotnetCoreKampı.Controllers
 {
     public class BlogController : Controller
     {
-        BlogManager blogManager = new BlogManager(new EfBlogRepository());
-        CategoryManager cm = new CategoryManager(new EfCategoryRepository());
+        private readonly BlogManager blogManager;
+        private readonly  CategoryManager cm;
+
+        public BlogController(BlogManager blogManager, CategoryManager cm)
+        {
+            this.blogManager = blogManager;
+            this.cm = cm;
+        }
+
         public IActionResult Index()
         {
             var values = blogManager.GetBlogListWithCategory();
@@ -21,12 +30,13 @@ namespace DotnetCoreKampı.Controllers
         public IActionResult BlogReadAll(int id)
         {
             ViewBag.blogId = id;
-            var values=blogManager.GetBlogById(id);
+            var values=blogManager.GetById(id);
             return View(values);
         }
         public IActionResult GetBlogsByWriterId()
         {
-            var values = blogManager.GetBlogListWithCategory().Where(x => x.WriterID == 1).ToList();
+
+            var values = blogManager.GetBlogListWithCategory().Where(x => x.WriterID == GetWriterID()).ToList();
             return View(values);
         }
         [HttpGet]
@@ -47,7 +57,7 @@ namespace DotnetCoreKampı.Controllers
             {
                 blog.BlogStatus = true;
                 blog.CreateDate = DateTime.Parse(DateTime.Now.ToShortDateString());
-                blog.WriterID = 1;
+                blog.WriterID = GetWriterID();
                 blogManager.TAdd(blog);
                 return RedirectToAction("GetBlogsByWriterId", "Blog");
             }
@@ -109,6 +119,12 @@ namespace DotnetCoreKampı.Controllers
                                                        Value = x.CategoryID.ToString()
                                                    }).ToList();
             return categoryValues;
+        }
+
+        public int GetWriterID()
+        {
+            var writerMailAdress = HttpContext.Session.GetInt32("writerID");
+            return writerMailAdress ?? 0;
         }
     }
 }

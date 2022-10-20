@@ -26,6 +26,15 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/Dashboard/Dashboard">Yazar Panel</a>
                 </li>
+                @if (Context.Session.GetInt32("writerID") != null)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Login/LogOut">Çıkış Yap</a>
+                    </li>
+                }
+
+
+
 
             </ul>
             <form action="#" method="post" class="form-inline my-2 my-lg-0 header-search">

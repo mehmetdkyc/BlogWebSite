@@ -7,7 +7,12 @@ namespace DotnetCoreKampı.Controllers
 {
     public class ContactController : Controller
     {
-        ContactManager contactManager = new ContactManager(new EfContactRepository());
+        ContactManager contactManager;
+
+        public ContactController(ContactManager contactManager)
+        {
+            this.contactManager = contactManager;
+        }
 
         [HttpGet]
         public IActionResult Index()

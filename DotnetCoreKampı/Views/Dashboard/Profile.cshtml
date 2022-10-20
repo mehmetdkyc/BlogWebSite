@@ -6,8 +6,8 @@
     <div class="card">
         <div class="card-body">
             <h4 class="card-title">Yazar Profil Güncelleme</h4>
-            <form class="forms-sample" asp-controller="Dashboard" asp-action="UpdateProfile" method="post" >
-                <div class="form-group">
+            <form class="forms-sample" asp-action="UpdateProfile" , asp-controller="Dashboard" method="post" enctype="multipart/form-data">
+                <div class="form-group" >
                     <label for="writerName">Yazar İsmi</label>
                     <input type="text" class="form-control" id="writerName" name="Name" value="@Model.Name">
                     @Html.ValidationMessageFor(x => x.Name, "", new { @class = "text-danger" })
@@ -24,18 +24,95 @@
                 </div>
 
                 <div class="form-group">
-                        <label>Yazar Görseli</label>
-                        <input type="file" name="WriterImage" class="file-upload-default">
-                        <div class="input-group col-xs-12">
-                            <input type="file" class="form-control file-upload-info" disabled placeholder="Resim Ekle..">
-                            <span class="input-group-append">
-                                <button class="file-upload-browse btn btn-gradient-primary" type="button">Yükle</button>
-                            </span>
-                        </div>
-                    </div>
+                    <label>Yazar Görseli</label>
+                    <input type="file" name="WriterImage" id="writerImage">
+                </div>
 
-                <button type="submit" class="btn btn-gradient-primary mr-2">Güncelle</button>
+                <button type="submit" @*onclick="updateWriter(@Model.ID)"*@ class="btn btn-gradient-primary mr-2">Güncelle</button>
             </form>
         </div>
     </div>
 </div>
+<script>
+    function updateWriter(writerId) {
+        if (writerId == null) {
+            alert("Id boş olamaz.");
+            return false;
+        }
+        var name = $('#writerName').val();
+        var mail = $('#writerMail').val();
+        var about = $('#writerAbout').val();
+        var image = $('#writerImage')[0].files[0];
+
+        var model = {
+            Name: name,
+            WriterAbout: about,
+            MailAdress: mail,
+            WriterImage: image,
+            ID: writerId
+        };
+        debugger;
+        var formData = new FormData();
+
+        var fileInput = $('#writerImage')[0];
+        var file = fileInput.files[0];
+        
+
+        formData.append("ID", writerId);
+        formData.append("MailAdress", mail);
+        formData.append("WriterImage", file);
+        formData.append("WriterAbout", about);
+        formData.append("Name", name);
+        $.ajax(
+            {
+                type: "POST",
+                url: '/Dashboard/UpdateProfile',
+                data: { 'imageFile': formData },
+                processData: false,
+                contentType: false,
+                enctype="multipart/form-data",
+                success: function (response) {
+                    if (response) {
+                        window.location.href = "/Dashboard/Dashboard";
+                    }
+                    else alert("Hata!");
+                },
+                error: function (response) {
+                    alert("Hata!");
+                }
+            }
+        );
+
+        //swal({
+        //    title: "Are you sure?",
+        //    text: "Once updated, you will not be able to recover this imaginary file!",
+        //    icon: "warning",
+        //    buttons: true,
+        //    dangerMode: true,
+        //}).then((willDelete) => {
+        //        if (willDelete) {
+        //            $.ajax(
+        //                {
+        //                    type: "POST",
+        //                    url: '/Blog/EditBlog',
+        //                    data: JSON.stringify(model),
+        //                    success: function (response) {
+        //                        swal("Poof! Your imaginary file has been updated!", {
+        //                            icon: "success",
+        //                        }).then((isOkey) => {
+        //                            if (isOkey) {
+        //                                window.location.href = response.redirectToUrl;
+        //                            }
+        //                        });
+        //                    },
+        //                    error: function (response) {
+
+        //                    }
+        //                }
+        //            );
+        //        } else {
+        //            swal("Your imaginary file is safe!");
+        //        }
+        //    });
+    }
+</script>

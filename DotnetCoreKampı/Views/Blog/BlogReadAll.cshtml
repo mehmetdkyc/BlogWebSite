@@ -1,5 +1,4 @@
-﻿
-@model IEnumerable<EntityLayer.Concrete.Blog>
+﻿@model Blog
 @{
     ViewData["Title"] = "Blog Detay";
     Layout = "~/Views/Shared/UserLayout.cshtml";
@@ -10,20 +9,19 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 left-blog-info-w3layouts-agileits text-left">
-                    @foreach (var item in Model)
-                    {
+
                         <div class="blog-grid-top">
                             <div class="b-grid-top">
                                 <div class="blog_info_left_grid">
                                     <a href="single.html">
-                                        <img src="@item.BlogImage" class="img-fluid" alt="">
+                                        <img src="@Model.BlogImage" class="img-fluid" alt="">
                                     </a>
                                 </div>
                                 <div class="blog-info-middle">
                                     <ul>
                                         <li>
                                             <a href="#">
-                                                <i class="far fa-calendar-alt"></i> @(((DateTime)item.CreateDate).ToString("dd-MMM-yyyy"))
+                                                <i class="far fa-calendar-alt"></i> @(((DateTime)Model.CreateDate).ToString("dd-MMM-yyyy"))
                                             </a>
                                         </li>
                                         <li class="mx-2">
@@ -42,13 +40,13 @@
                             </div>
 
                             <h3>
-                                <a href="#">@item.BlogTitle </a>
+                                <a href="#">@Model.BlogTitle </a>
                             </h3>
                             <p>
-                                @item.BlogContent
+                                @Model.BlogContent
                             </p>
                         </div>
-                    }
+                    
 
                     @await Component.InvokeAsync("CommentListByBlog", new { id = ViewBag.blogId}) 
 

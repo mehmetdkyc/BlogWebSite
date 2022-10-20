@@ -6,7 +6,13 @@ namespace DotnetCoreKampı.ViewComponents.Comment
 {
     public class CommentListByBlog : ViewComponent
     {
-        CommentManager cm = new CommentManager(new EfCommentRepository());
+        CommentManager cm;
+
+        public CommentListByBlog(CommentManager cm)
+        {
+            this.cm = cm;
+        }
+
         public IViewComponentResult Invoke(int id)
         {
             var values = cm.GetList(id);

@@ -2,21 +2,34 @@
 using BusinessLayer.ValidationRules;
 using DataAccessLayer.Concrete;
 using DataAccessLayer.EntityFramework;
+using DotnetCoreKampı.Models;
 using EntityLayer.Concrete;
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DotnetCoreKampı.Controllers
 {
     public class DashboardController : Controller
     {
-        WriterManager writerManager = new WriterManager(new EfWriterRepository());
+        WriterManager writerManager;
+        BlogManager blogManager;
+        CategoryManager categoryManager;
+        private readonly ILogger<DashboardController> logger;
+        
+        public DashboardController(ILogger<DashboardController> logger, WriterManager _writerManager, BlogManager _blogManager, CategoryManager _categoryManager)
+        {
+            this.writerManager=_writerManager;
+            this.blogManager = _blogManager;
+            this.categoryManager = _categoryManager;
+            this.logger = logger;
+        }
+
         public IActionResult Dashboard()
         {
-            Context context = new Context();
-            ViewBag.v1 = context.Blogs.ToList().Count;
-            ViewBag.v2 = context.Blogs.Where(x=>x.WriterID==1).Count();
-            ViewBag.v3 = context.Categories.ToList().Count;
+            ViewBag.v1 = blogManager.GetList().Count;
+            ViewBag.v2 = blogManager.GetList().Where(x=>x.WriterID== GetWriterID()).Count();
+            ViewBag.v3 = categoryManager.GetList().Count;
             return View();
         }
         [HttpGet]
@@ -26,19 +39,23 @@ namespace DotnetCoreKampı.Controllers
             return View(values);
         }
         [HttpPost]
-        public IActionResult UpdateProfile(Writer writer)
+        public IActionResult UpdateProfile(ProfilePictureModel imageFile)
         {
+            var writerNew = writerManager.GetById(GetWriterID());
+            writerNew.Name = imageFile.Name;
+            writerNew.MailAdress = imageFile.MailAdress;
+            writerNew.WriterAbout=imageFile.WriterAbout;
+
             WriterValidator validationRules = new WriterValidator();
-            ValidationResult result = validationRules.Validate(writer);
+            ValidationResult result = validationRules.Validate(writerNew);
             if (result.IsValid)
             {
-                writer.Status = true;
-                if(writer.WriterImage != null)
+                if(imageFile.WriterImage != null)
                 {
-                    //writer.WriterImage = ImageAdd(writer.WriterImage);
+                    writerNew.WriterImage = ImageAdd(imageFile.WriterImage);
                 }
-                writerManager.TUpdate(writer);
-                return RedirectToAction("Index", "Dashboard");
+                writerManager.TUpdate(writerNew);
+                return RedirectToAction("Dashboard", "Dashboard");
             }
             else
             {
@@ -58,6 +75,11 @@ namespace DotnetCoreKampı.Controllers
             var stream = new FileStream(location, FileMode.Create);
             image.CopyTo(stream);
             return newImageName;
+        }
+        public int GetWriterID()
+        {
+            var writerMailAdress = HttpContext.Session.GetInt32("writerID");
+            return writerMailAdress ?? 0;
         }
     }
 }

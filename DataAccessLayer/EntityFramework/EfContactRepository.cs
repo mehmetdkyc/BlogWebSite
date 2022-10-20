@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer.Abstract;
+using DataAccessLayer.Concrete;
 using DataAccessLayer.Repositories;
 using EntityLayer.Concrete;
 using System;
@@ -11,5 +12,10 @@ namespace DataAccessLayer.EntityFramework
 {
     public class EfContactRepository : GenericRepository<Contact>, IContactDal
     {
+        private readonly Context _context;
+        public EfContactRepository(Context context) : base(context)
+        {
+            this._context = context;
+        }
     }
 }

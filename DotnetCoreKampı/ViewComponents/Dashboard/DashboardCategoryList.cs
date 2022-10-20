@@ -6,7 +6,13 @@ namespace DotnetCoreKampı.ViewComponents.Dashboard
 {
     public class DashboardCategoryList: ViewComponent
     {
-        CategoryManager cm = new CategoryManager(new EfCategoryRepository());
+        CategoryManager cm;
+
+        public DashboardCategoryList(CategoryManager cm)
+        {
+            this.cm = cm;
+        }
+
         public IViewComponentResult Invoke()
         {
             var values = cm.GetList();

@@ -1,30 +1,94 @@
 ﻿
 @{
-    Layout = "~/Views/Shared/UserLayout.cshtml";
+    Layout = null;
 }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sign Up Form by Colorlib</title>
 
-<section class="main-content-w3layouts-agileits">
-    <div class="container">
-        <h3 class="tittle">Sign In Now</h3>
-        <div class="row inner-sec">
-            <div class="login p-5 bg-light mx-auto mw-100">
-                <form asp-controller="Login" asp-action="Index" method="post">
-                    <div class="form-group">
-                        <label for="exampleInputEmail1 mb-2">Email address</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" name="MailAdress" aria-describedby="emailHelp" placeholder="" required="">
+    <!-- Font Icon -->
+    <link rel="stylesheet" href="~/colorlib-regform-7/fonts/material-icon/css/material-design-iconic-font.min.css">
+
+    <!-- Main css -->
+    <link rel="stylesheet" href="~/colorlib-regform-7/css/style.css">
+</head>
+<body>
+
+    <div class="main">
+        <section class="sign-in">
+            <div class="container">
+                <div class="signin-content">
+                    <div class="signin-image">
+                        <figure><img src="~/colorlib-regform-7/images/signin-image.jpg" alt="sing up image"></figure>
+                        <a href="/Register/Index" class="signup-image-link">Hesap oluştur</a>
                     </div>
-                    <div class="form-group">
-                        <label for="exampleInputPassword1 mb-2">Password</label>
-                        <input type="password" class="form-control" id="exampleInputPassword1" name="Password" placeholder="" required="">
+
+                    <div class="signin-form">
+                        <h2 class="form-title">Giris Yap</h2>
+                        <form asp-controller="Login" asp-action="Index" method="post" class="register-form" id="login-form">
+                            <div class="form-group">
+                                <label for="your_name"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                                <input type="text" name="MailAdress" id="your_name" placeholder="Mail Adresi" />
+                            </div>
+                            <div class="form-group">
+                                <label for="your_pass"><i class="zmdi zmdi-lock"></i></label>
+                                <input type="password" name="Password" id="your_pass" placeholder="Şifre" />
+                            </div>
+                            <div class="form-group">
+                                <input type="checkbox" name="remember-me" id="remember-me" class="agree-term" />
+                                <label for="remember-me" class="label-agree-term"><span><span></span></span>Beni Hatırla</label>
+                            </div>
+                            <div class="form-group form-button">
+                                <input type="submit" name="signin" id="signin" class="form-submit" value="Giris Yap" />
+                            </div>
+                        </form>
+                        <div class="social-login">
+                            <span class="social-label">Ya da bunlar ile</span>
+                            <ul class="socials">
+                                <li><a href="#"><i class="display-flex-center zmdi zmdi-facebook"></i></a></li>
+                                <li><a href="#"><i class="display-flex-center zmdi zmdi-twitter"></i></a></li>
+                                <li><a href="#"><i class="display-flex-center zmdi zmdi-google"></i></a></li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="form-check mb-2">
-                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                        <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                    </div>
-                    <button type="submit" class="btn btn-primary submit mb-4">Sign In</button>
-                    <p><a href="/Register/Index/"> Don't have an account?</a></p>
-                </form>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- JS -->
+    <script src="~/colorlib-regform-7/vendor/jquery/jquery.min.js"></script>
+    <script src="~/colorlib-regform-7/js/main.js"></script>
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+</html>
+
+@*<section class="main-content-w3layouts-agileits">
+        <div class="container">
+            <h3 class="tittle">Sign In Now</h3>
+            <div class="row inner-sec">
+                <div class="login p-5 bg-light mx-auto mw-100">
+                    <form asp-controller="Login" asp-action="Index" method="post">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1 mb-2">Email address</label>
+                            <input type="email" class="form-control" id="exampleInputEmail1" name="MailAdress" aria-describedby="emailHelp" placeholder="" required="">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1 mb-2">Password</label>
+                            <input type="password" class="form-control" id="exampleInputPassword1" name="Password" placeholder="" required="">
+                        </div>
+                        <div class="form-check mb-2">
+                            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                            <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary submit mb-4">Sign In</button>
+                        <p><a href="/Register/Index/"> Don't have an account?</a></p>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>*@

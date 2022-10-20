@@ -3,19 +3,29 @@ using BusinessLayer.ValidationRules;
 using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DotnetCoreKampı.Controllers
 {
+    
     public class RegisterController : Controller
     {
-        WriterManager writerManager = new WriterManager(new EfWriterRepository());
+        private readonly WriterManager writerManager;
 
+        public RegisterController(WriterManager writerManager)
+        {
+            this.writerManager = writerManager;
+        }
+
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
+
+        [AllowAnonymous]
         [HttpPost]
         public IActionResult Index(Writer writer)
         {
@@ -26,9 +36,8 @@ namespace DotnetCoreKampı.Controllers
             {
                 writer.Status = true;
                 writer.WriterAbout = "denemetest";
-
                 writerManager.TAdd(writer);
-                return RedirectToAction("Index", "Blog");
+                return RedirectToAction("Index", "Login");
             }
             else
             {
