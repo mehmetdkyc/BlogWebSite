@@ -10,7 +10,7 @@
 <html lang="zxx">
 
 <head>
-    <title>Weblog a Blogging Category Bootstrap responsive WebTemplate | Blog3 :: w3layouts</title>
+    <title>Hoşgeldiniz!</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="utf-8">
     <meta name="keywords" content="Weblog a Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template,
@@ -25,6 +25,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             window.scrollTo(0, 1);
         }
     </script>
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="~/web/css/bootstrap.css" rel='stylesheet' type='text/css' />
     <link rel="stylesheet" href="~/web/css/single.css">
     <link href="~/web/css/style.css" rel='stylesheet' type='text/css' />
@@ -40,15 +42,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <header>
         <div class="top-bar_sub_w3layouts container-fluid">
             <div class="row">
-                <div class="col-md-4 logo text-left">
-                    <a class="navbar-brand" href="/Blog/Index/">
-                        <i class="fab fa-linode"></i> Weblog
-                    </a>
-                </div>
                 @if (Context.Session.GetInt32("writerID") == null)
                 {
             <div class="col-md-4 top-forms text-center mt-lg-3 mt-md-1 mt-0">
-                <span>Welcome Back!</span>
+                <span>Tekrardan Hoşgeldiniz!</span>
                 <span class="mx-lg-4 mx-md-2  mx-1">
                     <a href="/Login/Index">
                         <i class="fas fa-lock"></i> Giriş Yap

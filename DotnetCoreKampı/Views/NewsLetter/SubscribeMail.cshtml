@@ -2,26 +2,32 @@
 <div class="tech-btm">
 
     <p>Get the latest news of your writers.</p>
-    <form>
+    <div >
         <input type="email" placeholder="Email" required="" name="Mail" id="postmailadress">
-        <input type="submit" value="Subscribe" onclick="subMail()" >
-    </form>
+        <button class="btn btn-gradient-success col-lg-12" onclick="subMail()">Subscribe</button>
+    </div>
 
 </div>
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script>
     function subMail() {
         var mail = $('#postmailadress').val();
-        console.log(mail);
         if (mail == "") {
             alert("Mail Adress can't be null");
             return false;
         }
+
+       
+
         $.post(
             '/NewsLetter/SubscribeMail', {
             mailAdress: mail,
         }).done(function (result) {
-            alert("Success.");
+            Swal.fire({
+                icon: 'success',
+                title: 'Başarılı!',
+                text: 'Abone olduğunuz için teşekkürler.!'
+            })
         });
     }
     

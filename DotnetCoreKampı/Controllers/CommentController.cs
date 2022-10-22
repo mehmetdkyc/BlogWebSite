@@ -16,6 +16,11 @@ namespace DotnetCoreKampı.Controllers
             this.commentManager = commentManager;
         }
 
+        public IActionResult ReloadEvents(int id)
+        {
+            return ViewComponent("CommentListByBlog", new {id=id});
+        }
+
         public PartialViewResult CommentListByBlog(int id)
         {
             var values = commentManager.GetById(id);
@@ -30,11 +35,19 @@ namespace DotnetCoreKampı.Controllers
         [HttpPost]
         public IActionResult PartialAddComment(Comment comment)
         {
-            comment.Date =DateTime.Now;
-            comment.CommentStatus = true;
-            commentManager.TAdd(comment);
+            try
+            {
+                comment.Date = DateTime.Now;
+                comment.CommentStatus = true;
+                commentManager.TAdd(comment);
+                return RedirectToAction("ReloadEvents", "Comment", new { id = comment.BlogID });
+                //return Json(new { isSuccess = true, redirectUrl = "/Blog/BlogReadAll/" + comment.BlogID });
+            }
+            catch (Exception)
+            {
 
-            return RedirectToAction("BlogReadAll", "Blog", new { id =comment.BlogID});
+                return View();
+            }
         }
     }
 }

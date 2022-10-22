@@ -15,7 +15,8 @@ namespace DotnetCoreKampı.ViewComponents.Dashboard
 
         public IViewComponentResult Invoke()
         {
-            var values = writerManager.GetById(1);
+            var id = HttpContext.Session.GetInt32("writerID");
+            var values = writerManager.GetById(id ?? 0);
             return View(values);
         }
     }

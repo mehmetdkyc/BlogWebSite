@@ -35,6 +35,8 @@ namespace DotnetCoreKampı.Controllers
             {
                 var writerID = dataValue.ID;
                 HttpContext.Session.SetInt32("writerID", writerID);
+                HttpContext.Session.SetString("writerName", dataValue.Name);
+                HttpContext.Session.SetString("writerPathUrl", dataValue.WriterImage);
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name,writer.MailAdress)

@@ -78,8 +78,36 @@ namespace DotnetCoreKampı.Controllers
         }
         public int GetWriterID()
         {
-            var writerMailAdress = HttpContext.Session.GetInt32("writerID");
-            return writerMailAdress ?? 0;
+            var writerId = HttpContext.Session.GetInt32("writerID");
+            return writerId ?? 0;
+        }
+
+        [HttpGet]
+        public IActionResult Password()
+        {
+            return View();
+        }
+        [HttpPost]
+        public JsonResult Password(string oldPassword, string newPassword)
+        {
+            try
+            {
+                var writerInfo = writerManager.GetById(GetWriterID());
+                if (writerInfo != null && writerInfo.Password == oldPassword)
+                {
+                    writerInfo.Password = newPassword;
+                    writerManager.TUpdate(writerInfo);
+                    return Json(new { isSuccess = true, message = "" });
+                }
+                return Json(new { isSuccess=false,message="Girdiğiniz şifre doğru değildir."});
+            }
+            catch (Exception ex)
+            {
+
+                return Json(new { isSuccess = false, message = ex.Message.ToString()});
+            }
+            
+
         }
     }
 }
