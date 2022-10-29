@@ -19,6 +19,11 @@ namespace BusinessLayer.Concrete
             return _commentDal.GetTById(id);
         }
 
+        public List<Comment> GetCommentWithWriter(int id)
+        {
+            return _commentDal.GetCommentWithWriter(id);
+        }
+
         public List<Comment> GetList(int id)
         {
             return _commentDal.GetListAll(x=>x.BlogID==id);

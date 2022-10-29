@@ -1,6 +1,10 @@
 ﻿@model IEnumerable<EntityLayer.Concrete.Comment>
 
-
+<style>
+    img {
+        border-radius: 50%;
+    }
+</style>
 <div class="comment-top">
     <h4 >Comments</h4>
     <div class="media">
@@ -12,7 +16,7 @@
         {
             @foreach (var item in Model)
             {
-                <img src="~/web/images/t1.jpg" alt="" class="img-fluid" />
+                <img src="~/WriterImageFile/@item.Writer.WriterImage" alt="avatar" class="img-fluid" />
                 <div class="media-body">
                     <h5 class="mt-0">@item.CommentUserName</h5>
                     <p>

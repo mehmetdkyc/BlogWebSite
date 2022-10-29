@@ -15,7 +15,8 @@ namespace DotnetCoreKampı.ViewComponents.Comment
 
         public IViewComponentResult Invoke(int id)
         {
-            var values = cm.GetList(id);
+            
+            var values = cm.GetCommentWithWriter(id);
             return View(values);
         }
     }

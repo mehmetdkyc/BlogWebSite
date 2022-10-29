@@ -2,6 +2,7 @@
 using DataAccessLayer.Concrete;
 using DataAccessLayer.Repositories;
 using EntityLayer.Concrete;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,10 @@ namespace DataAccessLayer.EntityFramework
         public EfCommentRepository(Context context) : base(context)
         {
             this._context = context;
+        }
+        public List<Comment> GetCommentWithWriter(int id)
+        {
+            return _context.Comments.Include(x => x.Writer).Where(x => x.BlogID == id).ToList();
         }
     }
 }
