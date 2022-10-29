@@ -1,5 +1,6 @@
 ﻿using EntityLayer.Concrete;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace DataAccessLayer.Concrete
 {
@@ -13,9 +14,9 @@ namespace DataAccessLayer.Concrete
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Comment>()
-                .HasOne(x=>x.Writer)
-                .WithMany(y=>y.Comments)
-                .HasForeignKey(z=>z.WriterID)
+                .HasOne(x => x.Writer)
+                .WithMany(y => y.Comments)
+                .HasForeignKey(z => z.WriterID)
                 .OnDelete(DeleteBehavior.ClientSetNull);
         }
 

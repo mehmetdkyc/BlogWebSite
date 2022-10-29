@@ -4,39 +4,25 @@
 }
 
 <div class="comment-top">
-    <h4>Leave a Comment</h4>
+    <h4>Bir yorum yaz..</h4>
     <div class="comment-bottom">
         <form id="commentForm">
-            <input class="form-control" type="text" name="CommentUserName" placeholder="Name" required="">
-            <input class="form-control" type="text" name="CommentTitle" placeholder="Title" required="">
-            <input class="form-control" type="text" name="CommentContent" placeholder="Subject" required="">
+            <input class="form-control" type="text" name="CommentContent" placeholder="Yorum yaz.." required="">
 
-            <button onclick="sendComment()" class="btn btn-primary submit">Submit</button>
+            <button onclick="sendComment()" class="btn btn-primary submit">Gönder</button>
         </form>
     </div>
 </div>
 <script>
     function sendComment() {
-        var username = $('[name=CommentUserName]').val();
-        var title = $('[name=CommentTitle]').val();
         var content = $('[name=CommentContent]').val();
 
-        if (username == "") {
-            alert("Kullanıcı adı boş olamaz.");
-            return false;
-        }
-        if (title == "") {
-            alert("Başlık boş olamaz.");
-            return false;
-        }
         if (content == "") {
             alert("İçerik boş olamaz.");
             return false;
         }
 
         var model = {
-            CommentUserName: username,
-            CommentTitle: title,
             CommentContent: content,
             BlogID: '@blogId'
         };
@@ -50,13 +36,11 @@
                 success: function (response)
                 {
                     if (response.isSuccess) {
-                        console.log("girdi2");
                         //window.location.href = response.redirectUrl;
                     }
                     
                 },
                 error: function (response) {
-                    alert("Hata2!");
                 }
             }
         );

@@ -3,10 +3,13 @@ using BusinessLayer.Concrete;
 using BusinessLayer.ValidationRules;
 using DataAccessLayer.Concrete;
 using DataAccessLayer.EntityFramework;
+using DotnetCoreKampı.Models;
 using EntityLayer.Concrete;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
 
 namespace DotnetCoreKampı.Controllers
 {
@@ -30,7 +33,8 @@ namespace DotnetCoreKampı.Controllers
         public IActionResult BlogReadAll(int id)
         {
             ViewBag.blogId = id;
-            var values=blogManager.GetById(id);
+
+            var values = blogManager.GetBlogListWithCategory().Where(x => x.BlogID == id).SingleOrDefault();
             return View(values);
         }
         public IActionResult GetBlogsByWriterId()
@@ -42,23 +46,34 @@ namespace DotnetCoreKampı.Controllers
         [HttpGet]
         public IActionResult BlogAdd()
         {
-
-
             var categoryValues = GetCategoryList();
             ViewBag.CategoryValues = categoryValues;
             return View();
         }
         [HttpPost]
-        public IActionResult BlogAdd(Blog blog)
+        public IActionResult BlogAdd(BlogPictureModel blog)
         {
+            Blog newBlog = new Blog();
+            newBlog.BlogContent = blog.BlogContent;
+            newBlog.CategoryID = blog.CategoryID;
+            newBlog.BlogTitle = blog.BlogTitle;
+            newBlog.BlogThumbnailImage = ImageAdd(blog.BlogThumbnailImage);
+            newBlog.BlogImage = ImageAdd(blog.BlogImage);
+
             BlogValidator validationRules = new BlogValidator();
-            ValidationResult result = validationRules.Validate(blog);
+            ValidationResult result = validationRules.Validate(newBlog);
+
             if (result.IsValid)
             {
-                blog.BlogStatus = true;
-                blog.CreateDate = DateTime.Parse(DateTime.Now.ToShortDateString());
-                blog.WriterID = GetWriterID();
-                blogManager.TAdd(blog);
+                newBlog.BlogStatus = true;
+                newBlog.CreateDate = DateTime.Parse(DateTime.Now.ToShortDateString());
+                newBlog.WriterID = GetWriterID();
+                blogManager.TAdd(newBlog);
+
+                var increaseCount = cm.GetById(newBlog.CategoryID);
+                increaseCount.CategoryCount += 1;
+                cm.TUpdate(increaseCount);
+
                 return RedirectToAction("GetBlogsByWriterId", "Blog");
             }
             else
@@ -126,5 +141,47 @@ namespace DotnetCoreKampı.Controllers
             var writerMailAdress = HttpContext.Session.GetInt32("writerID");
             return writerMailAdress ?? 0;
         }
+
+        public static string ImageAdd(IFormFile image)
+        {
+
+            var extension = Path.GetExtension(image.FileName);
+            var newImageName = Guid.NewGuid() + extension;
+            var location = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/BlogPostImage/",
+                newImageName);
+
+            using (var memoryStream = new MemoryStream())
+            {
+                image.CopyTo(memoryStream);
+                using (var img = Image.Load(image.OpenReadStream()))
+                {
+                    var newSize = ResizeImage(img, 420, 380);
+                    string[] aSize = newSize.Split(',');
+                    img.Mutate(h => h.Resize(Convert.ToInt32(aSize[1]), Convert.ToInt32(aSize[0])));
+                    img.Save(location);
+                }
+            }
+            return newImageName;
+        }
+
+        public static string ResizeImage(Image img, int w, int h)
+        {
+            if (img.Width > w || img.Height > h)
+            {
+                double wRatio = (double)img.Width / (double)w;
+                double hRatio = (double)img.Height / (double)h;
+                double ratio = Math.Max(wRatio, hRatio);
+                int newWidth = (int)(img.Width / ratio);
+                int newHeight = (int)(img.Height / ratio);
+                return newHeight.ToString() + "," + newWidth.ToString();
+            }
+            else
+            {
+                return img.Height.ToString() + "," + img.Width.ToString();
+            }
+        }
+
+
+
     }
 }

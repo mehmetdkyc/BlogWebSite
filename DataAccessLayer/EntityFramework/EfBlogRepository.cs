@@ -21,7 +21,7 @@ namespace DataAccessLayer.EntityFramework
 
         public List<Blog> GetListWithCategory()
         {
-            return _context.Blogs.Include(c => c.Category).ToList();
+            return _context.Blogs.Include(c => c.Category).Include(c=>c.Comments).ToList();
         }
 
         public List<Blog> GetListWithCategoryByWriter(int id)

@@ -39,15 +39,21 @@ namespace DotnetCoreKampı.Controllers
             {
                 comment.Date = DateTime.Now;
                 comment.CommentStatus = true;
+                comment.WriterID = GetWriterID();
+                comment.CommentUserName= HttpContext.Session.GetString("writerName");
                 commentManager.TAdd(comment);
                 return RedirectToAction("ReloadEvents", "Comment", new { id = comment.BlogID });
-                //return Json(new { isSuccess = true, redirectUrl = "/Blog/BlogReadAll/" + comment.BlogID });
             }
             catch (Exception)
             {
 
                 return View();
             }
+        }
+        public int GetWriterID()
+        {
+            var writerMailAdress = HttpContext.Session.GetInt32("writerID");
+            return writerMailAdress ?? 0;
         }
     }
 }

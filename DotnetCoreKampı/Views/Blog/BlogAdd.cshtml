@@ -7,7 +7,7 @@
     <div class="card">
         <div class="card-body">
             <h4 class="card-title">Blog Ekle</h4>
-            <form class="forms-sample" asp-action="BlogAdd" asp-controller="Blog" method="post">
+            <form class="forms-sample" asp-action="BlogAdd" asp-controller="Blog" method="post" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="exampleInputName1">Blog Başlığı</label>
                     <input type="text" class="form-control" id="exampleInputName1" placeholder="Başlığı giriniz.." name="BlogTitle">
@@ -20,12 +20,12 @@
                 </div>
                 <div class="form-group">
                     <label for="exampleInputName2">Blog Thumbnail</label>
-                    <input class="form-control" id="exampleInputName2" name="BlogThumbnailImage">
+                    <input type="file" class="form-control" id="exampleInputName2" name="BlogThumbnailImage">
                     @Html.ValidationMessageFor(x => x.BlogThumbnailImage, "", new { @class = "text-danger" })
                 </div>
                 <div class="form-group">
                     <label for="exampleInputName4">Blog Resmi</label>
-                    <input class="form-control" id="exampleInputName4" name="BlogImage">
+                    <input type="file" class="form-control" id="exampleInputName4" name="BlogImage">
                     @Html.ValidationMessageFor(x => x.BlogImage, "", new { @class = "text-danger" })
                 </div>
                 <div class="form-group">
@@ -37,17 +37,6 @@
                         }
                     </select>
                 </div>
-                @*<div class="form-group">
-            <label>Resim Ekle</label>
-            <input type="file" name="BlogImage" class="file-upload-default">
-            <div class="input-group col-xs-12">
-                <input type="text" class="form-control file-upload-info" disabled placeholder="Resim Ekle..">
-                <span class="input-group-append">
-                    <button class="file-upload-browse btn btn-gradient-primary" type="button">Yükle</button>
-                </span>
-            </div>
-        </div>*@
-
                 <button type="submit" class="btn btn-gradient-primary mr-2">Submit</button>
                 <button class="btn btn-light">Cancel</button>
             </form>

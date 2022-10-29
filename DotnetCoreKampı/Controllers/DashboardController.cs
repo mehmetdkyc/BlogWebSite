@@ -37,7 +37,7 @@ namespace DotnetCoreKampı.Controllers
         [HttpGet]
         public IActionResult Profile()
         {
-            var values = writerManager.GetById(1);
+            var values = writerManager.GetById(GetWriterID());
             return View(values);
         }
         [HttpPost]
