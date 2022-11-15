@@ -1,10 +1,11 @@
 ﻿using EntityLayer.Concrete;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace DataAccessLayer.Concrete
 {
-    public class Context : DbContext
+    public class Context : IdentityDbContext
     {
         public Context(DbContextOptions<Context> contextOptions) : base(contextOptions)
         {
@@ -18,6 +19,8 @@ namespace DataAccessLayer.Concrete
                 .WithMany(y => y.Comments)
                 .HasForeignKey(z => z.WriterID)
                 .OnDelete(DeleteBehavior.ClientSetNull);
+
+            base.OnModelCreating(modelBuilder);
         }
 
         public DbSet<About>? Abouts { get; set; }

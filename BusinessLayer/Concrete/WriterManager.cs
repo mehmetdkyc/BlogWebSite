@@ -27,6 +27,11 @@ namespace BusinessLayer.Concrete
             return writerDal.GetAllList();
         }
 
+        public Writer GetWriterFullById(int id)
+        {
+            return writerDal.GetWriterFullById(id);
+        }
+
         public void TAdd(Writer t)
         {
             writerDal.Insert(t);

@@ -1,10 +1,11 @@
 ﻿@model List<EntityLayer.Concrete.Category>
 @{
     Layout = "~/Views/Shared/AdminLayout.cshtml";
+    int statusId = 0;
 }
 <style>
-    .categoryLinkButton{
-        color:white;
+    .categoryLinkButton {
+        color: white;
     }
 </style>
 <div class="col-lg-12">
@@ -31,29 +32,122 @@
                     @foreach (var item in Model)
                     {
                         <tr>
-                            <td>@item.CategoryName</td>
-                            <td>
+                            <td id="categoryName">@item.CategoryName</td>
+                            <td class="activeOrPasif" id="@item.CategoryID">
                                 @if (item.CategoryStatus)
                                 {
-                                    <label class="badge badge-gradient-success">Aktif</label>
+                                    <label class="badge badge-gradient-success" id="1">Aktif</label>
                                 }
                                 else
                                 {
-                                    <label class="badge badge-gradient-light">Pasif</label>
+                                    <label class="badge badge-gradient-light" id="0">Pasif</label>
                                 }
                             </td>
-                            <td> <a href="editCategory(@item.CategoryID)" class="btn btn-info"> Güncelle</a> </td>
+                            <td> <a  class="btn btn-info openUpdateModal"> Güncelle</a> </td>
                         </tr>
                     }
                 </tbody>
             </table>
-            <a class="btn btn-success categoryLinkButton">Aktif Yap</a>
-            <a class="btn btn-danger categoryLinkButton">Pasif Yap</a>
+            <a href="Category/AddCategory" class="btn btn-success" style="color:white;">Yeni Kategori</a>
         </div>
     </div>
 </div>
+<div class="modal fade" id="updateModel" tabindex="-1" role="dialog" aria-labelledby="updateModelTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateModelLongTitle">Kategori Güncelle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <small id="categoryIdModal" hidden></small>
+                    <div class="form-group">
+                        <label for="modalCatName">Kategori İsmi</label>
+                        <input type="text" class="form-control" id="modalCatName">
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label" for="aktifRadioButton" style="font-weight:bold">Aktif</label>
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="aktifRadioButton" value="1">
+
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label" for="pasifRadioButton" style="font-weight:bold">Pasif</label>
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="pasifRadioButton" value="0">
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" onclick="updateCategory()" class="btn btn-primary">Güncelle</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/inspinia-gh-pages/js/jquery-3.1.1.min.js"></script>
 <script>
-    function editCategory(id) {
+    var catName = "";
+    var active = "";
+    var categoryId = 0;
+    $(document).ready(function (e) {
+        $(document).on('click', '.openUpdateModal', function () {
+            catName = $(this).closest('tr').find('#categoryName').text();
+            active = $(this).closest('tr').find('.activeOrPasif').find('label.badge').attr('id');
+            categoryId = $(this).closest('tr').find('.activeOrPasif').attr('id');
+            $('#updateModel').modal('show');
+            $('#modalCatName').val(catName);
+            $('#categoryIdModal').val(categoryId);
+
+            if (active == "1")
+                $("#aktifRadioButton").prop('checked', true);
+            else
+                $("#pasifRadioButton").prop('checked', true);
+        });
+    });
+   
+
+    function updateCategory() {
+        var id = $('#categoryIdModal').val();
+        var name = $('#modalCatName').val();
+        var valueOfActive = $("input[name='inlineRadioOptions']:checked").val();
+        var boolActive = false;
+
+        if (name == catName && active == valueOfActive) {
+            alert("Bir değişiklik yapmadınız!!");
+            return false;
+        }
+        if (valueOfActive == 1) {
+            boolActive = true;
+        }
+        var model = {
+            CategoryID: id,
+            CategoryName: name,
+            CategoryStatus: boolActive
+        };
+        console.log(model);
+        $.ajax(
+            {
+                type: "POST",
+                url: 'Category/EditCategory',
+                data: model,
+                contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                dataType: "json",
+                success: function (response) {
+                    if (response) {
+                        window.location.href = "Category/Index";
+                    }
+                    else alert("Hata!");
+                },
+                error: function (response) {
+                    alert("Hata!");
+                }
+            }
+        );
 
     }
 </script>

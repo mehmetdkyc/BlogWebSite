@@ -5,6 +5,7 @@
 }
 
 <section class="main-content-w3layouts-agileits">
+
     <div class="container">
         <h3 class="tittle">Blog Posts</h3>
         <div class="inner-sec">
@@ -13,7 +14,7 @@
                 <div class="row">
                     @foreach (var item in Model)
                     {
-                        <div class="col-lg-4 card">
+                        <div class="col-lg-4 card ">
                             <a href="single.html">
                                 <img src="~/BlogPostImage/@item.BlogImage" class="card-img-top img-fluid" alt="">
 
@@ -42,12 +43,12 @@
                                 </h5>
                                 @if (item.BlogContent is not null)
                                 {
-                                    <p class="card-text mb-3">@item.BlogContent </p>
+                                    <p class="card-text mb-3">@item.BlogContent.Substring(0, item.BlogContent.Length < 75 ? item.BlogContent.Length : 75) </p>
 
                                 }
                                 else
                                 {
-                                    <p class="card-text mb-3">@item.BlogContent </p>
+                                    <p class="card-text mb-3">@item.BlogContent.Substring(0, item.BlogContent.Length < 75 ? item.BlogContent.Length : 75) </p>
 
                                 }
                                 <a href="/Blog/BlogReadAll/@item.BlogID/" class="btn btn-primary read-m">Read More</a>
